@@ -125,11 +125,12 @@ if __name__ == "__main__":
                         detection = rescale_boxes(detection, opt.img_size, RGBimg.shape[:2])
                         for x1, y1, x2, y2, conf, cls_conf, cls_pred in detection:
                             hola = classes[int(cls_pred)]
+                            cont = cont + 1
+                            box_w = x2 - x1
+                            box_h = y2 - y1
+                            color = [int(c) for c in colors[int(cls_pred)]]
                             if (hola == "Persona"):
-                                cont = cont + 1
-                                box_w = x2 - x1
-                                box_h = y2 - y1
-                                color = [int(c) for c in colors[int(cls_pred)]]
+
                                 #print("{} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2, y2))
                                 frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 5)
                                 cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 5)# Nombre de la clase detectada
@@ -141,6 +142,11 @@ if __name__ == "__main__":
                                 #igual jala aquí no sé porqué falta investigar.
                                 #cv2.line(frame,(170,100),(550,100),(255,0,0),2)    #Azul
                                 #cv2.line(frame,(2800,150),(800,400),(0,255,0),2)   #Verde
+                            if (hola == "Cuchillo"):
+                                frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), (255,0,0), 5)
+                                cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,0,0), 5)# Nombre de la clase detectada
+                                cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,0,0), 5)
+                                   
 
             #Convertimos de vuelta a BGR para que cv2 pueda desplegarlo en los colores correctos
             #print("----------------------------------",seg)
